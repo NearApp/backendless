@@ -1,0 +1,129 @@
+<!doctype html>
+<html ng-app="feed">
+    <head>
+
+        <title>Near</title>
+        <link rel="stylesheet" href="http://bootswatch.com/flatly/bootstrap.min.css">
+        <link rel="stylesheet" href="/assets/css/main.css"/>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-resource.min.js"></script>
+        <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+        <script src="http://firebase.github.io/angularFire/angularFire.js"></script>
+        <script src="/assets/js/project.js"></script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div id="sidebar">
+                <div class="user">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <img src="" alt=""/>
+                        </div>
+                        <div class="col-lg-6">
+                            Welcome clone1018
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active"><a href="/">Home</a></li>
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/messages">Messages</a></li>
+                </ul>
+            </div>
+
+            <div id="content">
+
+
+                <div ng-view></div>
+
+
+            </div>
+
+        </div>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGG3oBXPeFvWcUYyre5X8RANj7Q2XeX50&sensor=true&libraries=places"></script>
+        <script src="/assets/js/libraries/typeahead.min.js"></script>
+        <script type="text/javascript">
+
+            var populatePlaces = function (map, latitude, longitude) {
+                var loc = new google.maps.LatLng(latitude, longitude);
+
+                var request = {
+                    location: loc,
+                    radius: '500',
+                    types: ['store']
+                };
+
+                service = new google.maps.places.PlacesService(map);
+                service.nearbySearch(request, function (results, status) {
+                    if (status == google.maps.places.PlacesServiceStatus.OK) {
+                        var typeahead = [];
+
+                        for (var i = 0; i < results.length; i++) {
+                            var place = results[i];
+
+                            typeahead.push(place.name);
+                        }
+
+                        $('#userLocation').typeahead({
+                            name: 'places',
+                            local: typeahead
+                        });
+                    }
+                });
+
+
+            };
+
+            $(document).ready(function () {
+
+
+
+                //$('#checkin').click(function () {
+                $('body').on('click', '#checkin', function() {
+
+                    $('#newCheckin').slideDown('slow', function () {
+                        $('#userLocation').focus();
+                    });
+
+                    // Get location
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+
+                            var mapOptions = {
+                                center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+                                zoom: 15,
+                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                            };
+                            var map = new google.maps.Map(document.getElementById("newLocation"),
+                                    mapOptions);
+
+                            var marker = new google.maps.Marker({
+                                map: map,
+                                draggable: true,
+                                animation: google.maps.Animation.DROP,
+                                position: mapOptions.center
+                            });
+
+
+                            // Populate our typeahead
+                            populatePlaces(map, position.coords.latitude, position.coords.longitude);
+
+                            // Populate the form
+                            $('input[name="latitude"]').val(position.coords.latitude);
+                            $('input[name="longitude"]').val(position.coords.longitude);
+
+
+                        });
+                    }
+
+                });
+
+            });
+
+        </script>
+    </body>
+</html>

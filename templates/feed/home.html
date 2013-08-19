@@ -1,0 +1,74 @@
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-3">
+            <button id="checkin" class="btn btn-info btn-block">Check In</button>
+
+            <br>
+        </div>
+        <div class="col-lg-6">
+
+
+
+
+            <div id="newCheckin" class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Check In</h3>
+                </div>
+                <div class="panel-body">
+
+                    <form name="checkIn">
+                        <div class="control-group" ng-class="{error: checkIn.userLocation.$invalid}">
+                            <input type="text" name="location" ng-model="feed.location" required>
+                            <!--<input type="text" name="userLocation" ng-model="feed.userLocation" class="typeahead form-control" id="userLocation" autocomplete="off" spellcheck="false" placeholder="Your Location" required>-->
+                        </div>
+
+                        <div id="newLocation" class="map"></div>
+
+                        <br>
+                        <button ng-click="save()" ng-disabled="isClean() || checkIn.$invalid" class="btn btn-info pull-right">Check In</button>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="feed">
+
+                <div ng-repeat="feed in feeds | orderBy:'createdAt'" class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a href="/#/profile/clone1018">clone1018</a> is at <a href="/#/location/{{feed.location}}">{{feed.location}}</a></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="map map-{{id}}"></div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="col-lg-3">
+            <ul id="messages" class="list-group"></ul>
+
+            <script id="message-template" type="text/x-handlebars-template">
+                <li class="list-group-item"><a href="#!/profile/clone1018">clone1018:</a> {{message}}</li>
+            </script>
+
+            <form id="newMessage">
+                <input type="hidden" name="to" value="1"/>
+                <input type="hidden" name="from" value="1"/>
+
+                <div class="input-group">
+
+                    <input type="text" name="message" class="form-control">
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Send</button>
+                    </span>
+                </div>
+            </form>
+            <!-- /input-group -->
+        </div>
+    </div>
+
+</div>
+<!-- /container -->
