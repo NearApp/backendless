@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="feed">
+<html ng-app="near">
     <head>
 
         <title>Near</title>
@@ -9,6 +9,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-resource.min.js"></script>
         <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+        <script src="https://cdn.firebase.com/v0/firebase-simple-login.js"></script>
         <script src="http://firebase.github.io/angularFire/angularFire.js"></script>
         <script src="/assets/js/project.js"></script>
     </head>
@@ -27,9 +28,12 @@
                 </div>
 
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="/">Home</a></li>
-                    <li><a href="/profile">Profile</a></li>
-                    <li><a href="/messages">Messages</a></li>
+                    <li><a href="/#/">Feed</a></li>
+                    <li><a href="/#/feed/map">Map Feed</a></li>
+                    <li><a href="/#/profile">Profile</a></li>
+                    <li><a href="/#/messages">Messages</a></li>
+
+                    <li><a href="/#/login">Login</a></li>
                 </ul>
             </div>
 
@@ -47,6 +51,7 @@
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGG3oBXPeFvWcUYyre5X8RANj7Q2XeX50&sensor=true&libraries=places"></script>
         <script src="/assets/js/libraries/typeahead.min.js"></script>
         <script type="text/javascript">
+            google.maps.visualRefresh = true;
 
             var populatePlaces = function (map, latitude, longitude) {
                 var loc = new google.maps.LatLng(latitude, longitude);
@@ -108,14 +113,8 @@
                                 position: mapOptions.center
                             });
 
-
                             // Populate our typeahead
                             populatePlaces(map, position.coords.latitude, position.coords.longitude);
-
-                            // Populate the form
-                            $('input[name="latitude"]').val(position.coords.latitude);
-                            $('input[name="longitude"]').val(position.coords.longitude);
-
 
                         });
                     }
